@@ -1,0 +1,264 @@
+// ParkingTicketSim.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include "pch.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class ParkedCar {
+private:
+	string make;
+	string model;
+	string color;
+	string licenseNum;
+	int minutes;
+
+public:
+	ParkedCar()
+	{
+
+	}
+	ParkedCar(string m, string mod, string c, string licNum, int min)
+	{
+		make = m;
+		model = mod;
+		color = c;
+		licenseNum = licNum;
+		minutes = min;
+	}
+	void setMake(string m)
+	{
+		make = m;
+	}
+	void setModel(string mod)
+	{
+		model = mod;
+	}
+	void setColor(string c)
+	{
+		color = c;
+	}
+	void setLicNum(string licNum)
+	{
+		licenseNum = licNum;
+	}
+	void setMin(int min)
+	{
+		minutes = min;
+	}
+	string getMake()
+	{
+		return make;
+	}
+	string getModel()
+	{
+		return model;
+	}
+	string getColor()
+	{
+		return color;
+	}
+	string getLicNum()
+	{
+		return licenseNum;
+	}
+	int getMin()
+	{
+		return minutes;
+	}
+};
+
+class ParkingMeter {
+private:
+	int minutesPurchased;
+	
+public:
+	ParkingMeter()
+	{
+
+	}
+	ParkingMeter(int minPur)
+	{
+		minutesPurchased = minPur;
+	}
+	void setMinutesPurchased(int minPur)
+	{
+		minutesPurchased = minPur;
+	}
+	int getMinutesPurchased()
+	{
+		return minutesPurchased;
+	}
+};
+
+class ParkingTicket {
+private:
+	string mak;
+	string mod;
+	string col;
+	string liNum;
+	string name; 
+	string badgeNum;
+	int fine;
+	int BASE_FINE = 25;
+	int HOURLY_FINE = 10;
+
+public:
+	ParkingTicket(int time, string ma, string mo, string c, string lNum)
+	{
+		mak = ma;
+		mod = mo;
+		col = c;
+		liNum = lNum;
+	}
+	void setFine(int time)
+	{
+		int hours = time / 60;
+		int additional = 10 * hours;
+		fine = BASE_FINE + additional;
+	}
+	void setMak(string ma)
+	{
+		mak = ma;
+	}
+	void setMod(string mo)
+	{
+		mod = mo;
+	}
+	void setCol(string c)
+	{
+		col = c;
+	}
+	void setLiNum(string lNum)
+	{
+		liNum = lNum;
+	}
+	void setName(string n)
+	{
+		name = n;
+	}
+	void setBadgeNum(string badNum)
+	{
+		badgeNum = badNum;
+	}
+	int getFine()
+	{
+		return fine;
+	}
+	string getMak()
+	{
+		return mak;
+	}
+	string getMod()
+	{
+		return mod;
+	}
+	string getCol()
+	{
+		return col;
+	}
+	string getLiNum()
+	{
+		return liNum;
+	}
+	string getName()
+	{
+		return name;
+	}
+	string getBadgeNum()
+	{
+		return badgeNum;
+	}
+};
+
+class PoliceOfficer {
+private:
+	ParkedCar car;
+	ParkingMeter meter;
+	string officerName;
+	string officerBadge;
+
+public:
+	PoliceOfficer(ParkedCar c, ParkingMeter met, string offName, string offBadge)
+	{
+		car = c;
+		meter = met;
+		officerName = offName;
+		officerBadge = offBadge;
+	}
+	void setCar(ParkedCar c)
+	{
+		car = c;
+	}
+	void setParkingMeter(ParkingMeter met)
+	{
+		meter = met;
+	}
+	void setOfficerName(string offName)
+	{
+		officerName = offName;
+	}
+	void setOfficerBadge(string offBadge)
+	{
+		officerBadge = offBadge;
+	}
+	ParkedCar getCar()
+	{
+		return car;
+	}
+	ParkingMeter getParkingMeter()
+	{
+		return meter;
+	}
+	string getOfficerName()
+	{
+		return officerName;
+	}
+	string getOfficerBadge()
+	{
+		return officerBadge;
+	}
+	void determineTicket()
+	{
+		int determine = car.getMin() - meter.getMinutesPurchased();
+
+		if (determine > 0)
+		{
+			ParkingTicket ticket(determine, car.getMake(), car.getModel(), car.getColor(), car.getLicNum());
+			ticket.setFine(determine);
+			
+			cout << "\n  Ticket   " << "\nCar's make: " << ticket.getMak() << "\nCar's Model: " << ticket.getMod() << "\nCar's Color: " << ticket.getCol() <<"\nCar's license number: " << ticket.getLiNum() << endl;
+			cout << "The fine is: $" << ticket.getFine() << endl;
+			cout << "Officer's Name: " << getOfficerName() << "\nOfficer's badge Number: " << getOfficerBadge() << endl;
+
+		}
+		else
+		{
+			cout << "Not in violation" << endl;
+		}
+	}
+};
+int main()
+{
+	ParkedCar carOne("Honda", "Civic", "black", "563YIOH", 40);
+	ParkingMeter meterOne(60);
+	PoliceOfficer officerOne(carOne, meterOne, "Pat", "232");
+	
+	officerOne.determineTicket();
+
+	
+	ParkedCar carTwo("Toyota", "Camery", "red", "IAMP004", 980);
+	ParkingMeter meterTwo(200);
+	PoliceOfficer officerTwo(carTwo, meterTwo, "Cray", "567");
+
+	officerTwo.determineTicket();
+
+	
+	ParkedCar carThree("Nissan", "GTR", "chrome", "CYA420B", 251);
+	ParkingMeter meterThree(250);
+	PoliceOfficer officerThree(carThree, meterThree, "Yen", "909");
+
+	officerThree.determineTicket();
+}
